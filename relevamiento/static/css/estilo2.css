@@ -348,3 +348,30 @@ div.content {
   background-color: rgb(0, 0, 0);
   width: 15vw;
 }
+/*Container para la vista de listar programas*/
+.container-programas{
+  border: darkred;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  clear: both;
+}
+
+/**para el side bar*/
+
+.sidebar {
+  border: darkblue;
+  margin: 0;
+  padding: 0;
+  padding-top: 5%;
+  /*width: 200px;*/
+  max-width: 30%;
+  /*margin-left: 0%;*/
+  background-color: #1f1b19;
+  position: relative;
+  height: 80vh;
+  overflow: auto;
+  float: left;
+
+  margin-bottom: 0%;
+}
