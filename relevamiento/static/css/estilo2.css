@@ -336,7 +336,15 @@ div.content {
 
 }
 
+/*---------------------Para listar programas------*/
+.container-lista-programas{
+  float: inline-block;
+  height: 80%;
+  width: 80vw;
+}
 
-
-
-
+.container-navbar-lp{
+  padding-top: 5%;
+  background-color: rgb(0, 0, 0);
+  width: 15vw;
+}
