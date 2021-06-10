@@ -105,7 +105,6 @@ body {
   min-height:calc(100vh - 100px -200px) ;
 }
 .footer {
-position: fixed ;
 left: 0;
 bottom: 0px !important;
 width: 100%;
