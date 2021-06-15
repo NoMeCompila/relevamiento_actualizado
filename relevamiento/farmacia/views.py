@@ -1,11 +1,7 @@
 #from relevamiento.farmacia.models import Farmacia
-
-from usuario.forms import LoginForm
-from django.http import request
 from django.views.generic.edit import CreateView
-from .forms import FarmaciaForm, ProgramaForm, ProvinciaForm
-from .models import Farmacia, Fcia, Programa, Provincia
-from django.core.exceptions import ObjectDoesNotExist
+from .forms import ProgramaForm, ProvinciaForm
+from .models import Fcia, Programa, Provincia, Localidad
  #import de las vistas basadas en clases
 from django.views.generic import ( 
                                 TemplateView, #Vista basada en clase para renderizar una página estática simple 
@@ -14,27 +10,17 @@ from django.views.generic import (
                                 CreateView, #Vista basada en clase para renderizar un template de Creacion
                                 DeleteView) #Vista basada en clase para renderizar un template de Borrado
 from django.urls import reverse_lazy
-from django.shortcuts import redirect, render
-from django.contrib.auth import login,logout, authenticate
 
-
-# def login_request(request):
-#     login(request)
-#     form = LoginForm()
-#     return render(request, 'farmacia/login.html',{'form':form})
-
-# def logout_request(request):
-#     logout(request)
-#     #messages.info(request, "logout exitoso")
-#     return redirect('login')
 # Vista basada en clase para renderizar un template simple
 class Inicio(TemplateView):
     template_name = 'index.html'
 
+# Vista que renderiza el login
 class Login(TemplateView):
     template_name = 'farmacia/login.html' # indicar la ruta desde la raiz sin especificar esta misma
 
 #-------------------------- CRUD de programas --------------------------
+
 # Vista basada en clase para listar programas (EN PROCESO)
 class ListarProgramas(ListView):
     model = Programa
@@ -54,22 +40,40 @@ class EliminarPrograma(DeleteView):
     model = Programa
     success_url =  reverse_lazy('farmacia:lista_programas')
 
+#Vista basada en clase para actualizar un programa
 class Actualizarprograma(UpdateView):
 
     model = Programa
     template_name = 'farmacia/agregar_programa.html'
     form_class = ProgramaForm
     success_url = reverse_lazy('farmacia:lista_programas')
-#-------------------------------------------------------------------------------------------------
-# Vista basada en clase que permite listar los datos de una tabla
+#-------------------------- FIN CRUD de programas --------------------------
+    
+#--------------------------  CRUD de Provincias --------------------------
+
+# Vista basada en clase para listar los datos de las Provincias
 class ListarProv(ListView):
     model = Provincia
     template_name = 'farmacia/listar_provincias.html'
-    context_object_name = 'provincias'
+    context_object_name = 'provincias' #objeto para recorrer la tabla
     queryset = Provincia.objects.all()
 
-# Vista basada en clase que permite crear un nuevo objeto en la base de datos
+#Vista basada en clase para listar las Provincias Desactivadas
+class ListarProvDesactivadas(ListView):
+    model = Provincia
+    template_name = 'farmacia/lista_prov_desactivadas.html'
+    context_object_name = 'provincias'
+    queryset = Provincia.objects.all() #consulta a la abse de datos
+
+# Vista basada en clase para agregar una provincia
 class CrearProv(CreateView):
+    model = Provincia
+    template_name = 'farmacia/agregar_prov.html'
+    form_class = ProvinciaForm
+    success_url = reverse_lazy('farmacia:listar_provincias')
+
+#Vista basada en clase para actualizar una provincia
+class ActualizarProv(UpdateView):
     model = Provincia
     template_name = 'farmacia/agregar_prov.html'
     form_class = ProvinciaForm
@@ -80,35 +84,32 @@ class EliminarProv(DeleteView):
     model = Provincia
     success_url = (reverse_lazy('farmacia:listar_provincias'))   
 
-# Vista para crear un programa
-class CrearPrograma(CreateView):
-    model = Programa
-    template_name = 'farmacia/agregar_programa.html'
-    form_class = ProgramaForm
-    success_url = reverse_lazy('farmacia:listar_programas')
-
-class ActualizarProv(UpdateView):
-    model = Provincia
-    form_class = ProvinciaForm
-    template_name = 'farmacia/agregar_prov.html'
-    success_url = reverse_lazy('farmacia:listar_provincias')
-
-# Codigo para editar una provincia
-class EditarProvincia(UpdateView):
+# Codigo para editar una provincia (repetido revisar)
+class EditarProvincia(UpdateView):  
     model = Provincia
     template_name = 'farmacia/agregar_prov.html'
     form_class = ProvinciaForm
     success_url = reverse_lazy('farmacia:listar_provincias')
 
-class CrearFcia(TemplateView):
-    template_name = 'farmacia/agregar_prov.html' 
-# def Lista_Fcia(request):
-#     fcias = Fcia.objects.all()
-#     return render(request,'farmacia/probando_lista.html',{'fcias':fcias})
+#-------------------------- FIN CRUD de Provincias --------------------------
 
-# VISTA BASADA EN CLASE PARA LISTAR UNA TABLA
+#------------------vista para listar las localidades
+class ListarLoc(ListView):
+    model = Localidad
+    template_name = 'farmacia/listar_localidades.html'
+    context_object_name = 'localidad'
+    
+    # Redefinicion del metodo get_queryset para realizar la consulta de filtro de ciudad por provincia
+    def get_queryset(self):
+        qs = Localidad.objects.all() # qs igual
+        provincia = self.request.GET.get("lang")
+        if provincia:
+            qs = qs.filter(id_provincia_id = provincia)
+        return qs
+
+# Vista basada en clase para listar las farmacias
 class ListarFcias(ListView):
     model = Fcia
-    template_name = 'farmacia/probando_lista.html'
+    template_name = 'farmacia/lista_farmacia.html'
     context_object_name = 'fcias'
     queryset = Fcia.objects.all()
