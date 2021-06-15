@@ -2,38 +2,35 @@
 
 
 {% block titulo %}
-    lista-provincias
+    provincias-desactivadas
 {% endblock titulo %}
 
 
 {% block body %}
 
   
-<h2 style="text-align: center;">Lista de Provincias</h2>
+<h2 style="text-align: center;">Lista de Provincias Desactivadas</h2>
     
     {% if provincias %}
     <div style="margin: 50px;" class="table-responsive-sm">
-        <a href="{% url 'farmacia:lista_prov_desactivadas' %}"><button class="btn btn-success" style="margin-bottom: 10px;">Activar Provincia</button></a>
+         <a href="{% url 'farmacia:listar_provincias' %}"><button class="btn btn-dark" style="margin-bottom: 10px;">Atrás</button></a>
         <table class="table table-light table-hover">
           <thead>
                                   
               <tr>
-
                 <th>ID de la Provincia</th>
                 <th>Nombre de la Provincia</th>
                 <th>Opciones</th>
-              
               </tr>
         
         {% for prov in provincias %}
-        {% if prov.estado == 1 %}
+        {% if prov.estado == 0 %}
             <tr>
                 <td>{{prov.id_provincia}}</td>
                 <td>{{prov.descripcion}}</td>
                 <td>
-                    <a href="{% url 'farmacia:lista_localidades' %}?lang={{prov.id_provincia}}" >Ciudades</a> |
-                    <!-- <a href="#" >Farmacias</a> | -->
-                    <a href="#">Desactivar</a>
+                    <a href="#" > <button class="btn btn-success">Activar</button></a>
+                    {% comment %} <a href="{% url 'farmacia:actualizar_provincia' prov.id_localidad %}" > <button class="btn btn-success">Activar</button></a> {% endcomment %}
                 </td>
                 
             </tr>
