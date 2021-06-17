@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>
   {% block titulo %}
-    lista-programas
+    lista-programas-eliminados
   {% endblock titulo %}
 </title>
 </head>
@@ -25,12 +25,7 @@
           <div class="well">
             <h1 id="tituloListas">Programas</h1>
           </div>
-
-          {% if  programas %}
-
-          <a type="button" class="btn btn-primary" href="{% url 'farmacia:agregar_programas' %}">Agregar nuevo programa</a>
-          <!-- editar el boton eliminados para que lleve a una lista con los programas deshabilitados y que le de al usuario la opcion para eliminarlo completamente o habilitarlo de nuevo  -->
-          <a type="button" class="btn btn-dark" href="{% url 'farmacia:lista_programas_desactivados' %}">desactivados</a>
+          <a type="button" class="btn btn-primary" href="{% url 'farmacia:lista_programas' %}">atrás</a>
           <br><br>
           <div class="table-responsive-sm">
             <table class="table table-light table-hover">
@@ -46,21 +41,16 @@
               <tbody>
                 <!-- este for recorre el modelo y muestra sus datos -->
                 {% for programa in programas %}
-                {% if programa.estado == 1 %}
+                {% if programa.estado == 0 %}
                 <tr>
                   <td>{{programa.programa}}</td>
                   <td>{{programa.nombre}}</td>
                   <td>{{programa.version}}</td>
                   <td>{{programa.fecha_install}}</td>
-                  <td><a href="{% url 'farmacia:actualizar_programa' programa.programa %}">Actualizar</a> |   <a href="{% url 'farmacia:activar_programa' programa.programa %}">Desactivar</a></td>
-                  
+                  <td><a href="{% url 'farmacia:activar_programa' programa.programa %}"><button class="btn btn-success">activar</button><a href="{% url 'farmacia:eliminar_programa' programa.programa %}"> <button class="btn btn-danger">eliminar</button></a></a></td>
                 </tr>
                 {% endif %}
                 {% endfor %}
-
-                {% else %}
-                  <h1 style="text-align:center;"> No hay programas para mostrar</h1>
-                {% endif %}
               </tbody>
             </table>
           </div>
