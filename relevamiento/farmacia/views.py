@@ -1,6 +1,6 @@
 #from relevamiento.farmacia.models import Farmacia
 from django.views.generic.edit import CreateView
-from .forms import ProgramaForm, ProvinciaForm
+from .forms import ProgramaForm, ProvinciaForm, ProgramaActForm
 from .models import Fcia, Programa, Provincia, Localidad
  #import de las vistas basadas en clases
 from django.views.generic import ( 
@@ -21,6 +21,13 @@ class Login(TemplateView):
 
 #-------------------------- CRUD de programas --------------------------
 
+# Vista basada en clase para listar los programas eliminados/desactivados
+class ListarProgDesactivados(ListView):
+    model = Programa
+    template_name = 'farmacia/lista_programas_desactivados.html'
+    context_object_name = 'programas'
+    queryset = Programa.objects.all()
+
 # Vista basada en clase para listar programas (EN PROCESO)
 class ListarProgramas(ListView):
     model = Programa
@@ -38,7 +45,7 @@ class AgregarPrograma(CreateView):
 # Vista basada en clase para eliminar completamente un objeto de la base de datos 
 class EliminarPrograma(DeleteView):
     model = Programa
-    success_url =  reverse_lazy('farmacia:lista_programas')
+    success_url =  reverse_lazy('farmacia:lista_programas_desactivados')
 
 #Vista basada en clase para actualizar un programa
 class Actualizarprograma(UpdateView):
@@ -46,6 +53,12 @@ class Actualizarprograma(UpdateView):
     model = Programa
     template_name = 'farmacia/agregar_programa.html'
     form_class = ProgramaForm
+    success_url = reverse_lazy('farmacia:lista_programas')
+
+class ActivarPrograma(UpdateView):
+    model = Programa
+    template_name = 'farmacia/agregar_programa.html'
+    form_class = ProgramaActForm
     success_url = reverse_lazy('farmacia:lista_programas')
 #-------------------------- FIN CRUD de programas --------------------------
     
@@ -108,8 +121,18 @@ class ListarLoc(ListView):
         return qs
 
 # Vista basada en clase para listar las farmacias
+
+
 class ListarFcias(ListView):
     model = Fcia
-    template_name = 'farmacia/lista_farmacia.html'
+    template_name = 'farmacia/listar_farmacias.html'
     context_object_name = 'fcias'
-    queryset = Fcia.objects.all()
+
+    # Redefinicion del metodo get_queryset para realizar la consulta de filtro de farmacia por ciudad
+    def get_queryset(self):
+        qs = Fcia.objects.all() # trago todas las farmacias
+        farmacia = self.request.GET.get("lang")
+        #Cambair esta parte del codgo para que compare el id de provincia con el de localidad y desp con el de farmacia
+        if farmacia:
+            qs = qs.filter(id_localidad = farmacia)
+        return qs

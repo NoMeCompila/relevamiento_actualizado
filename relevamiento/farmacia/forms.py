@@ -1,27 +1,46 @@
 from django import forms
 #from django.db import forms
-from django.forms import fields, widgets
-from .models import Farmacia, Fcia, Provincia, Programa
+#from django-autocomplete-light import 
+from .models import Farmacia, Provincia, Programa
 
+#Formulario para crear farmacia
 class FarmaciaForm(forms.ModelForm):
     class Meta:     
         model = Farmacia
         fields = ['fica_id', 'nombre', 'direccion']
 
+#Formualrio para crear provincia
 class ProvinciaForm(forms.ModelForm):
     class Meta:     
         model = Provincia
-        fields = ['id_provincia', 'descripcion']
+        fields = ['id_provincia', 'descripcion','estado']
         widgets={
             'id_provincia': forms.TextInput(attrs={'class': 'form-control'}),
-            'descripcion': forms.TextInput(attrs={'class': 'form-control'})
+            'descripcion': forms.TextInput(attrs={'class': 'form-control'}),
+            'estado': forms.TextInput(attrs={'class': 'form-control'})
         }
 
         labels = { #permite definir una etiqueta personalizada para cada un de losa tributos
             'id' : 'id_provincia',
-            'descripcion' : 'nombre de la provincia'
+            'descripcion' : 'nombre de la provincia',
+            'estado': 'estado'
         }
 
+#Form para actualizar estado de una provincia
+class ProvinciaActForm(forms.ModelForm):
+    class Meta:     
+
+        model = Provincia
+        fields = ['estado']
+        widgets={
+            'estado': forms.TextInput(attrs={'class': 'form-control'})
+        }
+
+        labels = { #permite definir una etiqueta personalizada para cada un de losa tributos
+            'estado': 'estado'
+        }
+
+#Formulario para agregar/actualizar un programa
 class ProgramaForm(forms.ModelForm):
     
     class Meta:
@@ -44,10 +63,27 @@ class ProgramaForm(forms.ModelForm):
             'nombre': 'nombre del programa',
             'version': 'version del programa actual',
             'fecha_install': 'fecha de instalacion'
-        }         
+        }
+
+#Formulario para agregar/actualizar un programa
+
+ESTADOS={"activar":True,"desactivar":False}
 
 
-# class FciaForm(forms.ModelForm):
-#     class Meta:
-#         model = Fcia
-#         fields = ['','','','']
+class ProgramaActForm(forms.ModelForm):
+    
+    class Meta:
+        # en la subclase Meta del ModelForm se indica el modelo al cual pertenece
+        # el nombre de los campos que deben aparecer
+        # y los widgets que sirven para darle estilos al formulario
+        model = Programa
+        
+        fields = ['estado']
+
+        widgets = {
+            'estado': forms.ChoiceField(choices=ESTADOS)
+        }
+
+        # labels = {
+        #     'estado' : 'estado del programa True (activo) False (inactivo)'
+        # }
