@@ -1,17 +1,17 @@
 from django.db import models
 from django.db.models.base import Model
-from django.db.models.fields import CharField, Field
+from django.db.models.fields import CharField
 from django.forms.models import model_to_dict
 
 # Create your models here.
-
-# Tabla Programa
+program_status = [(0,"Desactivar"),(1,"Activar")]
+# Clase que crea una tabla con los datos para los programas instalados
 class Programa(models.Model):
     programa = models.IntegerField(primary_key=True)
     nombre = models.CharField("Nombre del Programa", max_length = 100, null = False, blank = False)
     version = models.CharField("Nombre del Programa", max_length = 100, null = False, blank = True)
     fecha_install = models.DateField(auto_now=False, auto_now_add=False,null = False, blank = False)
-    estado = models.BooleanField("Programa dado de baja",default=False)
+    estado = models.IntegerField(null=False,blank=False,choices=program_status,default=1)
     def __str__(self):
         return self.nombre
     
@@ -19,7 +19,7 @@ class Programa(models.Model):
         verbose_name = 'Programa'
         verbose_name_plural = 'Programas'
 
-# Tabla Farmacia
+
 class Farmacia(models.Model):
     fica_id = models.IntegerField(primary_key=True)
     nombre = models.CharField(("Nombre Fcia"), max_length=50)
@@ -57,7 +57,7 @@ class Usuario(models.Model):
     nombre = models.CharField("nombre", max_length= 256, null = False, blank = False)
     apellido = models.CharField("apellido", max_length= 256, null = False, blank = False)
     usuario = models.CharField("usuario", max_length= 256, null = False, blank = False)
-    estado = models.BooleanField("usuario dado de baja si/no", default = True)
+    baja = models.BooleanField("usuario dado de baja si/no", default = True)
     id_perfil = models.ForeignKey(Perfil, on_delete=models.CASCADE) # Clave foranea en Django
 
     def __str__(self):
@@ -69,11 +69,15 @@ class Usuario(models.Model):
 
 # Tabla de Provincias
 
+
+provinica_status = [(0,"Desactivar"),(1,"activar")]
+
 class Provincia(models.Model):
 
     id_provincia = models.IntegerField("id_provincia", null = False, blank = False, primary_key=True)
     descripcion = models.CharField("descripcion", max_length=256, null = False, blank = False)
-    estado = models.BooleanField("Provincia activa (con farmacias)",default=False)
+    estado = models.IntegerField(null=False,blank=False,choices=provinica_status,default=1)
+
     def __str__(self):
         return self.descripcion
 
@@ -83,12 +87,14 @@ class Provincia(models.Model):
 
 # Tabla localidad 
 
+localidad_status=[(0,"Activar"),(1,"Desactivar")]
+
 class Localidad(models.Model):
 
     id_localidad = models.IntegerField("id_localidad", null = False, blank = False, primary_key=True)
-    id_provincia = models.ForeignKey(Provincia, on_delete = models.CASCADE)
+    id_provincia_id = models.ForeignKey(Provincia, on_delete = models.CASCADE)
     descripcion = models.CharField("descripcion", max_length = 256, null = False, blank = False)
-
+    estado = models.IntegerField(null=False, blank=False,choices=localidad_status,default=1)
     def __str__(self):
         return self.descripcion
 
@@ -96,6 +102,7 @@ class Localidad(models.Model):
         verbose_name = 'localidad'
         verbose_name_plural = 'localidades'
 
+        
 
 # Tabla para las PC
 
@@ -136,7 +143,8 @@ class Fcia(models.Model):
     nombre_facia = models.CharField("nombre_farmacia", max_length = 256, null = False, blank  = False)
     direccion = models.CharField("direccion", max_length = 256, null = False, blank = False)
     id_localidad = models.ForeignKey(Localidad, on_delete = models.CASCADE)
-    ip = models.ForeignKey(Pc_Farmacia, on_delete = models.CASCADE)
+    #ip = models.ForeignKey(Pc_Farmacia, on_delete = models.CASCADE)
+    ip = models.ForeignKey(Pc_Farmacia,blank=True,null=True,default="192.168.0.", on_delete = models.CASCADE)
 
     def __str__(self):
         return self.nombre_facia

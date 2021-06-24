@@ -1,6 +1,6 @@
 #from relevamiento.farmacia.models import Farmacia
 from django.views.generic.edit import CreateView
-from .forms import ProgramaForm, ProvinciaForm, ProgramaActForm
+from .forms import LocalidadForm, ProgramaForm, ProvinciaForm, ProgramaActForm, ProvinciaActForm
 from .models import Fcia, Programa, Provincia, Localidad
  #import de las vistas basadas en clases
 from django.views.generic import ( 
@@ -18,6 +18,39 @@ class Inicio(TemplateView):
 # Vista que renderiza el login
 class Login(TemplateView):
     template_name = 'farmacia/login.html' # indicar la ruta desde la raiz sin especificar esta misma
+
+#-------------------------- CRUD de ciudades --------------------------
+
+#------------------vista para listar las localidades
+class ListarLoc(ListView):
+    model = Localidad
+    template_name = 'farmacia/listar_localidades.html'
+    context_object_name = 'localidad'
+    
+    # Redefinicion del metodo get_queryset para realizar la consulta de filtro de ciudad por provincia
+    def get_queryset(self):
+        qs = Localidad.objects.all() # qs igual
+        provincia = self.request.GET.get("lang")
+        if provincia:
+            qs = qs.filter(id_provincia_id = provincia)
+        return qs
+
+
+# Vista basada en clase para listar los datos de las localidades desactivadas
+class ListarLocDes(ListView):
+    model = Localidad
+    template_name = 'farmacia/localidades_desactivadas.html'
+    context_object_name = 'localidad'
+    queryset = Localidad.objects.all()
+
+class AgregarLoc(CreateView):
+    model = Localidad
+    template_name = 'farmacia/agregar_localidad.html'
+    form_class = LocalidadForm
+    success_url = reverse_lazy('farmacia:lista_localidades') 
+
+
+#--------------------------FIN CRUD de ciudades --------------------------
 
 #-------------------------- CRUD de programas --------------------------
 
@@ -64,12 +97,21 @@ class ActivarPrograma(UpdateView):
     
 #--------------------------  CRUD de Provincias --------------------------
 
+class ActivarProvincia(UpdateView):
+    model = Provincia
+    template_name = 'farmacia/agregar_prov.html'
+    form_class = ProvinciaActForm
+    success_url = reverse_lazy('farmacia:listar_provincias')
+
 # Vista basada en clase para listar los datos de las Provincias
 class ListarProv(ListView):
     model = Provincia
     template_name = 'farmacia/listar_provincias.html'
     context_object_name = 'provincias' #objeto para recorrer la tabla
     queryset = Provincia.objects.all()
+
+
+
 
 #Vista basada en clase para listar las Provincias Desactivadas
 class ListarProvDesactivadas(ListView):
@@ -106,23 +148,10 @@ class EditarProvincia(UpdateView):
 
 #-------------------------- FIN CRUD de Provincias --------------------------
 
-#------------------vista para listar las localidades
-class ListarLoc(ListView):
-    model = Localidad
-    template_name = 'farmacia/listar_localidades.html'
-    context_object_name = 'localidad'
-    
-    # Redefinicion del metodo get_queryset para realizar la consulta de filtro de ciudad por provincia
-    def get_queryset(self):
-        qs = Localidad.objects.all() # qs igual
-        provincia = self.request.GET.get("lang")
-        if provincia:
-            qs = qs.filter(id_provincia_id = provincia)
-        return qs
+
+
 
 # Vista basada en clase para listar las farmacias
-
-
 class ListarFcias(ListView):
     model = Fcia
     template_name = 'farmacia/listar_farmacias.html'

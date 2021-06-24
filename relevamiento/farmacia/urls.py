@@ -5,7 +5,10 @@ from django.urls import path
 from django.contrib.auth.decorators import login_required
 # from django.urls import reverse_lazy
 from .views import (
+    AgregarLoc,
+    ListarLocDes,
     #ActualizarProvAct,
+    ActivarProvincia,
     ActivarPrograma,
     ListarProvDesactivadas,
     ListarProgramas,
@@ -24,7 +27,7 @@ from .views import (
 urlpatterns = [
     #-------------------------------- LOGIN --------------------------------
     path('lista_localidades/', login_required(ListarLoc.as_view()), name ="lista_localidades"),
-
+    path('agregar_localidad/',login_required(AgregarLoc.as_view()),name = "agregar_localidad"),
     #-------------------------- Ruteo de CRUD  Para Programas --------------------------
     path('lista_programas/',login_required(ListarProgramas.as_view()), name = 'lista_programas'),
     path('agregar_programas/',login_required(AgregarPrograma.as_view()), name = 'agregar_programas'),
@@ -32,7 +35,7 @@ urlpatterns = [
     path('actualizar_programa/<int:pk>',login_required(Actualizarprograma.as_view()), name  = 'actualizar_programa'),
     path('activar_programa/<int:pk>', login_required(ActivarPrograma.as_view()),name = 'activar_programa'),
 
-    
+    path('activar_provincia/<int:pk>',login_required(ActivarProvincia.as_view()),name  = 'activar_provincia'),
     path('listar_provincias/', login_required(ListarProv.as_view()), name  = 'listar_provincias'),
     path('lista_prov_desactivadas/',login_required(ListarProvDesactivadas.as_view()),name = 'lista_prov_desactivadas'),
     path('agregar_prov/', CrearProv.as_view(), name  = 'agregar_prov'),
@@ -40,5 +43,6 @@ urlpatterns = [
     path('actualizar_prov/<int:pk>', ActualizarProv.as_view(), name  = 'actualizar_prov'),
     path('lista_farmacias/', login_required(ListarFcias.as_view()), name ="lista_farmacias"),
     path('lista_programas_desactivados/', login_required(ListarProgDesactivados.as_view()), name ="lista_programas_desactivados"),
+    path('localidades_desactivadas/',login_required(ListarLocDes.as_view()),name = 'localidades_desactivadas'),
 
 ] 

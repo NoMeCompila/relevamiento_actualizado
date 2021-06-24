@@ -1,7 +1,59 @@
 from django import forms
 #from django.db import forms
 #from django-autocomplete-light import 
-from .models import Farmacia, Provincia, Programa
+from .models import Farmacia, Provincia, Programa, Localidad
+
+class LocalidadForm(forms.ModelForm):
+    
+    class Meta:
+        # en la subclase Meta del ModelForm se indica el modelo al cual pertenece
+        # el nombre de los campos que deben aparecer
+        # y los widgets que sirven para darle estilos al formulario
+        model = Localidad
+        
+        fields = ['id_localidad','descripcion','id_provincia_id']
+
+        widgets = {
+            'id_localidad': forms.TextInput(attrs={'class': 'form-control'}),
+            'id_provincia_id.descripcion':forms.TextInput(attrs={'class': 'form-control'}),
+            'descripcion': forms.TextInput(attrs={'class': 'form-control'})
+
+        }
+
+        # def __init__(self,*args, **kwargs):
+        #     super().__init__(*args, **kwargs)
+
+        #     self.fields['id_provincia_id'].widget.attrs.update({
+        #         'class': 'form-control'
+        #     })
+
+        labels = {
+            'id_localidad': 'id de la localidad',
+            'id_provincia_id.descripcion': 'provincia a la que pertenece',
+            'descripcion': 'nombre de la localidad'
+        }
+
+#Formulario para agregar/actualizar un programa
+class ProgramaActForm(forms.ModelForm):
+    
+    class Meta:
+
+        model = Programa
+        
+        fields = ['estado']
+
+        def __init__(self,*args, **kwargs):
+            super().__init__(*args, **kwargs)
+
+            self.fields['estados'].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+        labels = {
+            'estado' : 'estado del programa (Activar/Desactivar)'
+        }
+
+
 
 #Formulario para crear farmacia
 class FarmaciaForm(forms.ModelForm):
@@ -65,25 +117,23 @@ class ProgramaForm(forms.ModelForm):
             'fecha_install': 'fecha de instalacion'
         }
 
-#Formulario para agregar/actualizar un programa
-
-ESTADOS={"activar":True,"desactivar":False}
 
 
-class ProgramaActForm(forms.ModelForm):
+class ProvinciaActForm(forms.ModelForm):
     
     class Meta:
-        # en la subclase Meta del ModelForm se indica el modelo al cual pertenece
-        # el nombre de los campos que deben aparecer
-        # y los widgets que sirven para darle estilos al formulario
-        model = Programa
+
+        model = Provincia
         
         fields = ['estado']
 
-        widgets = {
-            'estado': forms.ChoiceField(choices=ESTADOS)
-        }
+        def __init__(self,*args, **kwargs):
+            super().__init__(*args, **kwargs)
 
-        # labels = {
-        #     'estado' : 'estado del programa True (activo) False (inactivo)'
-        # }
+            self.fields['estados'].widget.attrs.update({
+                'class': 'form-control'
+            })
+
+        labels = {
+            'estado' : 'estado de la provincia (Activar/Desactivar)'
+        }
