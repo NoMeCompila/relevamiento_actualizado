@@ -31,9 +31,10 @@
                 <td>{{prov.id_provincia}}</td>
                 <td>{{prov.descripcion}}</td>
                 <td>
-                    <a href="{% url 'farmacia:lista_localidades' %}?lang={{prov.id_provincia}}" >Ciudades</a> |
+                    <a href="{% url 'farmacia:lista_localidades' %}?lang={{prov.id_provincia}}" >Ciudades</a>
+                    <a href="{% url 'farmacia:activar_provincia' prov.id_provincia %}"> | Desactivar</a>
                     <!-- <a href="#" >Farmacias</a> | -->
-                    <a href="#">Desactivar</a>
+                    {% comment %} <a href="#">Desactivar</a> {% endcomment %}
                 </td>
                 
             </tr>
