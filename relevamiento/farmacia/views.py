@@ -1,7 +1,7 @@
 #from relevamiento.farmacia.models import Farmacia
 from django.views.generic.edit import CreateView
 from .forms import LocalidadForm, ProgramaForm, ProvinciaForm, ProgramaActForm, ProvinciaActForm
-from .models import Fcia, Programa, Provincia, Localidad
+from .models import Farmacia, Fcia, Programa, Provincia, Localidad
  #import de las vistas basadas en clases
 from django.views.generic import ( 
                                 TemplateView, #Vista basada en clase para renderizar una página estática simple 
@@ -175,7 +175,9 @@ class ProbandoLista(ListView):
     template_name = 'farmacia/listar_farmacia_2.html'
     model = Provincia
     second_model = Localidad
-    def get_context_data(self, *args, **kwargs): # 
+    third_model = Farmacia
+    def get_context_data(self, *args, **kwargs): 
         provincias = Provincia.objects.all()
         localidades = Localidad.objects.all()
-        return {'provincias': provincias, 'localidades': localidades}
+        farmacias = Fcia.objects.all()
+        return {'provincias': provincias, 'localidades': localidades, 'farmacias':farmacias}
