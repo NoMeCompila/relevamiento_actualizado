@@ -1,0 +1,64 @@
+{% extends 'index.html' %}
+<!doctype html>
+{% load static %}
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block titulo %}
+        lista-farmacias 2.0
+        {% endblock titulo %}
+    </title>
+</head>
+<body>
+    <main>  
+        {% block body %}
+        <div class="container">
+            <!--Para la nueva organizacion de las farmacias-->
+            <div>
+                <h1 style="text-align: center;">Lista de Farmacias</h1>
+            </div>
+            <div class="table-responsive-sm">
+                <table class="table table-light table-striped table-hover">
+                    {% for prov in provincias %}
+                    <thead> 
+                        <tr>    
+                            <th></th><th></th>
+                            <th>{{prov.descripcion}}</th>
+                            <th></th>
+                    </thead>
+                    <tbody>
+                        </tr>
+                        <tr>
+                        {% for loc in localidades %}
+                        {% if loc.id_provincia_id_id == prov.id_provincia %}
+                        <th></th>
+                            <td style="color: blue;">{{loc.descripcion}}</td>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                        {% endfor %}
+                        <!-- <tr>
+
+                        <tr>
+                            <th>Nombre</th>
+                            <th>direccion</th>
+                            <th>IP</th>
+                        </tr>
+                        <tr>
+                            <td>Farmacia San Fulanito</td>
+                            <td>Avenida siempre viva</td>
+                            <td>192.168.0.123</td>
+                        </tr> -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endblock body %}
+    </main>
+</body>
+</html>
