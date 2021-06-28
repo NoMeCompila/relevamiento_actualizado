@@ -38,6 +38,17 @@
                             <td style="color: blue;">{{loc.descripcion}}</td>
                             <th></th>
                             <th></th>
+                            <tr>
+                            {% for fcia in farmacias %}
+                            {% if fcia.id_localidad_id == loc.id_localidad %}
+                            <td>{{fcia.id_farmacia}}</td>
+                            <td>{{fcia.nombre_facia}}</td>
+                            <td>{{fcia.direccion}}</td>
+                            <td>{{fcia.ip_id}}</td>
+                            
+                            {% endif %}
+                            {% endfor %}
+                            </tr>
                         </tr>
                         {% endif %}
                         {% endfor %}
