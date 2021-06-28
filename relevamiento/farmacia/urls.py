@@ -5,6 +5,7 @@ from django.urls import path
 from django.contrib.auth.decorators import login_required
 # from django.urls import reverse_lazy
 from .views import (
+    ProbandoLista,
     AgregarLoc,
     ListarLocDes,
     #ActualizarProvAct,
@@ -45,4 +46,5 @@ urlpatterns = [
     path('lista_programas_desactivados/', login_required(ListarProgDesactivados.as_view()), name ="lista_programas_desactivados"),
     path('localidades_desactivadas/',login_required(ListarLocDes.as_view()),name = 'localidades_desactivadas'),
 
+    path('listar_farmacias_2/',login_required(ProbandoLista.as_view()), name = 'listar_farmacias_2'),
 ] 

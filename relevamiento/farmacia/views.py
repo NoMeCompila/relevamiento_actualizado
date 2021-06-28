@@ -165,3 +165,17 @@ class ListarFcias(ListView):
         if farmacia:
             qs = qs.filter(id_localidad = farmacia)
         return qs
+
+
+
+
+#----------------Probando------------
+
+class ProbandoLista(ListView):
+    template_name = 'farmacia/listar_farmacia_2.html'
+    model = Provincia
+    second_model = Localidad
+    def get_context_data(self, *args, **kwargs): # 
+        provincias = Provincia.objects.all()
+        localidades = Localidad.objects.all()
+        return {'provincias': provincias, 'localidades': localidades}
