@@ -13,7 +13,7 @@
     
     {% if provincias %}
     <div style="margin: 50px;" class="table-responsive-sm">
-         <a href="{% url 'farmacia:listar_provincias' %}"><button class="btn btn-dark" style="margin-bottom: 10px;">Atrás</button></a>
+         <a href="{% url 'farmacia:listar_provincias' %}"><button class="btn btn-primary" style="margin-bottom: 10px;">atrás</button></a>
         <table class="table table-light table-hover">
           <thead>
                                   
@@ -29,7 +29,7 @@
                 <td>{{prov.id_provincia}}</td>
                 <td>{{prov.descripcion}}</td>
                 <td>
-                    <a href="#" > <button class="btn btn-success">Activar</button></a>
+                    <a href="{% url 'farmacia:activar_provincia' prov.id_provincia %}" > <button class="btn btn-success">Activar</button></a>
                     {% comment %} <a href="{% url 'farmacia:actualizar_provincia' prov.id_localidad %}" > <button class="btn btn-success">Activar</button></a> {% endcomment %}
                 </td>
                 
