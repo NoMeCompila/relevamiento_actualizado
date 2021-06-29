@@ -32,7 +32,11 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
+LOGIN_REDIRECT_URL = 'farmacia:listar_farmacias_2'   #'index'
+LOGOUT_REDIRECT_URL = 'farmacia:listar_farmacias_2'  #'index'
+
+
+INSTALLED_APPS = [ #aplicaciones instaladas del proyecto si se crea una nueva aplicación se debe instalar desde aca
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,7 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'farmacia',
-    'usuario',
 ]
 
 MIDDLEWARE = [
@@ -53,7 +56,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'relevamiento.urls'
+ROOT_URLCONF = 'relevamiento.urls' #ruta donde se encuentra el archivo que maneja las rutas del proyecto
 
 TEMPLATES = [
     {
@@ -87,8 +90,7 @@ DATABASES = {
         'PORT': '3306',
     }    
 }
-LOGIN_REDIRECT_URL = 'index'
-LOGOUT_REDIRECT_URL = 'index'
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

@@ -16,23 +16,15 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-#from farmacia import views
-from farmacia.views import Inicio,ListarFcias#, Login, logout_request
-#from .usuario.views import Login
-# url farmacia:crear_farmacia 
+from farmacia.views import Inicio,Login 
 from django.conf import settings
 from django.conf.urls.static import static
 
-# Librerias para login y logout
-from django.contrib.auth import login,logout
-
+from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
-    path('admin/', admin.site.urls),#modelo vista template (similar a vista controlador)
+    path('admin/', admin.site.urls),
     path('farmacias/', include(('farmacia.urls','farmacia'))),
+    path('', login_required(Inicio.as_view()), name = 'index'),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('', Inicio.as_view(), name = 'index'),
-    # path('login/', views.login_request, name = 'login'),
-    # path('logout/', views.logout_request, name = 'logout'),
-
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
