@@ -1,6 +1,6 @@
 #from relevamiento.farmacia.models import Farmacia
 from django.views.generic.edit import CreateView
-from .forms import LocalidadForm, ProgramaForm, ProvinciaForm, ProgramaActForm, ProvinciaActForm
+from .forms import LocalidadForm, ProgramaForm, ProvinciaForm, ProgramaActForm, ProvinciaActForm,LocalidadActForm
 from .models import Farmacia, Fcia, Programa, Provincia, Localidad
  #import de las vistas basadas en clases
 from django.views.generic import ( 
@@ -49,6 +49,11 @@ class AgregarLoc(CreateView):
     form_class = LocalidadForm
     success_url = reverse_lazy('farmacia:lista_localidades') 
 
+class ActivarLocalidad(UpdateView):
+    model = Localidad
+    template_name = 'farmacia/agregar_localidad.html'
+    form_class = LocalidadActForm
+    success_url = reverse_lazy('farmacia:lista_localidades')
 
 #--------------------------FIN CRUD de ciudades --------------------------
 
@@ -87,6 +92,13 @@ class Actualizarprograma(UpdateView):
     template_name = 'farmacia/agregar_programa.html'
     form_class = ProgramaForm
     success_url = reverse_lazy('farmacia:lista_programas')
+
+class ActivarPrograma(UpdateView):
+    model = Programa
+    template_name = 'farmacia/agregar_programa.html'
+    form_class = ProgramaActForm
+    success_url = reverse_lazy('farmacia:lista_programas')
+
 
 class ActivarPrograma(UpdateView):
     model = Programa
